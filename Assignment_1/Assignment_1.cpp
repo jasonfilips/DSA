@@ -7,17 +7,12 @@
 #include <vector>
 #include <string>
 
-int main()
-{
-    std::cout << "Hello World!\n";
-}
-
 //Enum representing different book genres
 enum class Genre {
-    ScienceFiction,
+    SpaceOpera,
     Fiction,
     Mystery,
-    HistoricalFiction,
+    Novel,
     NonFiction
 };
 
@@ -28,8 +23,40 @@ struct BookData {
     int pageCount;
 };
 
+//Serializing data into a CSV file
+//Using & to not copy the data, but use a refference
+//Using const to not modify the data
+void serializeData(const std::vector<BookData>& books, const std::string& filePath) {
+    //created a new variable using the ofstream constructor
+    std::ofstream file(filePath);
+
+    if (!file.is_open()) {
+        std::cerr << "Error opening file: " << filePath << std::endl;
+        return;
+    }
+
+    //Adding the header
+    file << "Title,Genre,PageCount\n";
+
+    //Adding each book's data
+    for (const auto& book : books) {
+        file << book.title << "," << static_cast<int>(book.genre) << "," << book.pageCount << "\n";
+    }
+}
 
 
+int main()
+{
+   //Example
+    std::vector<BookData> books = {
+        {"The Temple of the Golden Pavilion", Genre::Novel, 264},
+        {"Legend of the Galactic Heroes: Dawn", Genre::SpaceOpera, 292},
+        {"House of Leaves", Genre::Mystery, 736}
+    };
+
+    //Serialize data
+    serializeData(books, "books.csv");
+}
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
 // Debug program: F5 or Debug > Start Debugging menu
 
