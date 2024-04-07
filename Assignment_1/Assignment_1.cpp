@@ -2,11 +2,33 @@
 //
 
 #include <iostream>
+#include <fstream>
+#include <sstream>
+#include <vector>
+#include <string>
 
 int main()
 {
     std::cout << "Hello World!\n";
 }
+
+//Enum representing different book genres
+enum class Genre {
+    ScienceFiction,
+    Fiction,
+    Mystery,
+    HistoricalFiction,
+    NonFiction
+};
+
+//Struct to represent information about a book
+struct BookData {
+    std::string title;
+    Genre genre;
+    int pageCount;
+};
+
+
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
 // Debug program: F5 or Debug > Start Debugging menu
