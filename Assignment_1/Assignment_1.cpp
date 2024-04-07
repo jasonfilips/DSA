@@ -44,6 +44,42 @@ void serializeData(const std::vector<BookData>& books, const std::string& filePa
     }
 }
 
+//Deserializing data from a CSV file
+std::vector<BookData> deserializeData(const std::string& filePath) {
+    std::vector<BookData> books;
+    std::ifstream file(filePath);
+    if (!file.is_open()) {
+        std::cerr << "Error opening file: " << filePath << std::endl;
+        return books;
+    }
+
+    //Skipping the first line by reading and not storing it
+    std::string line;
+    std::getline(file, line);
+
+    //Reading each line and adding data to books
+    while (std::getline(file, line)) {
+        std::istringstream iss(line);
+        std::string title;
+        int genre;
+        int pageCount;
+
+        if (std::getline(iss, title, ',') &&
+            iss >> genre && // reads the int value untill encounters a non int value
+            iss.ignore() && // Ignore the comma
+            iss >> pageCount) {
+            BookData book;
+            book.title = title;
+            book.genre = static_cast<Genre>(genre);
+            book.pageCount = pageCount;
+            books.push_back(book);
+        }
+    }
+
+    file.close();
+    return books;
+}
+
 
 int main()
 {
@@ -56,6 +92,16 @@ int main()
 
     //Serialize data
     serializeData(books, "books.csv");
+
+    //Deserialize data
+    std::vector<BookData> desirializedBooks = deserializeData("books.csv");
+
+    //Display deserialized data
+    for (const auto& book : desirializedBooks) {
+        std::cout << "Title: " << book.title << ", Genre: " << static_cast<int>(book.genre) << ", Page count: " << book.pageCount << std::endl;
+    }
+
+    return 0;
 }
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
 // Debug program: F5 or Debug > Start Debugging menu
