@@ -42,6 +42,8 @@ void serializeData(const std::vector<BookData>& books, const std::string& filePa
     for (const auto& book : books) {
         file << book.title << "," << static_cast<int>(book.genre) << "," << book.pageCount << "\n";
     }
+
+    file.close();
 }
 
 //Deserializing data from a CSV file
@@ -83,7 +85,7 @@ std::vector<BookData> deserializeData(const std::string& filePath) {
 
 int main()
 {
-   //Example
+    //Example
     std::vector<BookData> books = {
         {"The Temple of the Golden Pavilion", Genre::Novel, 264},
         {"Legend of the Galactic Heroes: Dawn", Genre::SpaceOpera, 292},
