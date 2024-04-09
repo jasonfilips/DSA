@@ -5,23 +5,69 @@
 #include <chrono>
 
 bool analyzeSpeed(const std::vector<BookData>& books, std::string& searchItem) {
-    std::cout << "Testing the speed of the algorithm" << std::endl;
-    auto start = std::chrono::steady_clock::now();
-    auto end = std::chrono::steady_clock::now();
-    std::chrono::duration<double> duration = end - start;
-    //run the algorithm 10 times
-    for (int i = 0; i < 100; i++) {
+    std::cout << "Testing the speed of the algorithms" << std::endl;
+
+    auto linearSearchStart = std::chrono::steady_clock::now();
+    auto linearSearchEnd = std::chrono::steady_clock::now();
+    std::chrono::duration<double> linearSearchTotalTime;
+
+    auto binaryTreeSearchStart = std::chrono::steady_clock::now();
+    auto binaryTreeSearchEnd = std::chrono::steady_clock::now();
+    std::chrono::duration<double> binaryTreeSearchTotalTime;
+
+    bool binaryTreeSearchFound = false;
+    bool linearSearchFound = false;
+
+    BinarySearchTree bst(books);
+
+    //run the algorithm 100000 times
+    for (int i = 0; i < 100000; i++) {
+        linearSearchStart = std::chrono::steady_clock::now();
         if (linearSearch(books, searchItem)) {
-            end = std::chrono::steady_clock::now();
-            duration = end - start;
-            std::cout << "Item was found, the time to complete the algorithm " << duration.count() << " seconds" << std::endl;
-            return true;
+            //std::cout << "Item was found using Linear Search, the time to complete the algorithm " << linearSearchTotalTime.count() << " seconds" << std::endl;
+            linearSearchFound = true;
+        }
+        linearSearchEnd = std::chrono::steady_clock::now();
+
+        if (i == 0) {
+            linearSearchTotalTime = linearSearchEnd-linearSearchStart;
+        }
+        else {
+            linearSearchTotalTime += linearSearchEnd - linearSearchStart;
+        }
+
+        binaryTreeSearchStart = std::chrono::steady_clock::now();
+        if (bst.search(searchItem)) {
+            //std::cout << "Item was found using Binary Tree Search, the time to complete the algorithm " << binaryTreeSearchTotalTime.count() << " seconds" << std::endl;
+            binaryTreeSearchFound = true;
+        }
+        binaryTreeSearchEnd = std::chrono::steady_clock::now();
+
+        if (i == 0) {
+            binaryTreeSearchTotalTime = binaryTreeSearchEnd - binaryTreeSearchStart;
+        }
+        else {
+            binaryTreeSearchTotalTime += binaryTreeSearchEnd - binaryTreeSearchStart;
         }
     }
-    end = std::chrono::steady_clock::now();
-    duration = end - start;
-    std::cout << "Item was not found, the time to complete the algorithm " << duration.count() << " seconds" << std::endl;
-    return false;
+
+    std::cout << "It took Linear Search " << linearSearchTotalTime.count() << " seconds to complete" << std::endl;
+    if (linearSearchFound) {
+        std::cout << "Item was found using Linear Search." << std::endl;
+    }
+    else {
+        std::cout << "Item was not found using Linear Search." << std::endl;
+    }
+
+    std::cout << "It took Binary Tree Search " << binaryTreeSearchTotalTime.count() << " seconds to complete" << std::endl;
+    if (binaryTreeSearchFound) {
+        std::cout << "Item was found using Binary Tree Search." << std::endl;
+    }
+    else {
+        std::cout << "Item was not found using Binary Tree Search." << std::endl;
+    }
+
+    return binaryTreeSearchFound == linearSearchFound;
 }
 
 int main()
@@ -40,7 +86,10 @@ int main()
         {"The Resurrectionist: The Lost Work of Dr. Spencer Black", Genre::Mystery, 192}
     };
 
-    std::string searchTerm = "The Resurrectionist: The Lost Work of Dr. Spencer Black";
+    std::string firstItem = "The Temple of the Golden Pavilion";
+    std::string lastItem = "The Resurrectionist: The Lost Work of Dr. Spencer Black";
+    std::string notInDatabase = "hello";
+
     
     //Serialize data
     serializeData(books, "books.csv");
@@ -54,25 +103,16 @@ int main()
         std::cout << "Title: " << book.title << ", Genre: " << static_cast<int>(book.genre) << ", Page count: " << book.pageCount << std::endl;
     }*/
     
-    if (analyzeSpeed(deserializedBooks, searchTerm)) {
-        std::cout << "found" << std::endl;
-    }
-    else {
-        std::cout << "not found" << std::endl;
-    }
-
-    std::string str1 = "The Lesser Dead";
-    std::string str2 = "Those Across the River";
-
-    if (str1 == str2) {
-        std::cout << "a" << std::endl;
-    }
-    else if (str1 < str2) {
-        std::cout << "b" << std::endl;
-    }
-    else {
-        std::cout << "c" << std::endl;
-    }
-
+    std::cout << "In case of the item being the first in the data base: " << std::endl;
+    analyzeSpeed(deserializedBooks, firstItem);
+    std::cout << std::endl;
+    std::cout << "In case of the item being the last in the data base: " << std::endl;
+    analyzeSpeed(deserializedBooks, lastItem);
+    std::cout << std::endl;
+    std::cout << "In case of the item not existing in the data base: " << std::endl;
+    analyzeSpeed(deserializedBooks, notInDatabase);
+    std::cout << std::endl;
     return 0;
 }
+
+

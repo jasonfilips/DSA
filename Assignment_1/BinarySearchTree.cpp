@@ -1,5 +1,4 @@
 #include "Serialization.h"
-#include <vector>
 
 //Binary tree node
 struct TreeNode {
@@ -10,22 +9,28 @@ struct TreeNode {
     TreeNode(const BookData& book) :book(book), left(nullptr), right(nullptr) {}
 };
 
-
 class BinarySearchTree {
 private:
     TreeNode* root;
 
     TreeNode* insertNode(TreeNode* node, const BookData& book);
     bool searchNode(TreeNode* node, const std::string& searchItem) const; //adding const at the end to not modify any member variables of the class
+    void createTree(const std::vector<BookData>& books);
     void deleteTree(TreeNode* node);
 
 public:
-    BinarySearchTree() : root(nullptr) {}
+    BinarySearchTree(const std::vector<BookData>& books);
     ~BinarySearchTree();
 
     void insert(const BookData& book);
+    void create(const std::vector<BookData>& books);
     bool search(const std::string& searchItem) const;
 };
+
+//Constructor
+BinarySearchTree::BinarySearchTree(const std::vector<BookData>& books) : root(nullptr) {
+    create(books);
+}
 
 //Destructor
 BinarySearchTree::~BinarySearchTree() {
@@ -81,5 +86,17 @@ bool BinarySearchTree::searchNode(TreeNode* node, const std::string& searchItem)
     }
     else {
         return searchNode(node->right, searchItem);
+    }
+}
+
+//Public function to create a tree
+void BinarySearchTree::create(const std::vector<BookData>& books) {
+    createTree(books);
+}
+
+//Function to create a tree from a books vector
+void BinarySearchTree::createTree(const std::vector<BookData>& books) {
+    for (const auto& book : books) {
+        insert(book);
     }
 }
