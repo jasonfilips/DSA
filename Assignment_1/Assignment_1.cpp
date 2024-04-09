@@ -1,6 +1,7 @@
 #include "Serialization.h"
 #include "LinearSearch.h"
 #include "BinaryTreeSearch.h"
+#include "BinarySearch.h"
 #include <vector>
 #include <chrono>
 
@@ -15,7 +16,12 @@ bool analyzeSpeed(const std::vector<BookData>& books, std::string& searchItem) {
     auto binaryTreeSearchEnd = std::chrono::steady_clock::now();
     std::chrono::duration<double> binaryTreeSearchTotalTime;
 
+    auto binarySearchStart = std::chrono::steady_clock::now();
+    auto binarySearchEnd = std::chrono::steady_clock::now();
+    std::chrono::duration<double> binarySearchTotalTime;
+
     bool binaryTreeSearchFound = false;
+    bool binarySearchFound = false;
     bool linearSearchFound = false;
 
     BinaryTreeSearch bst(books);
@@ -49,6 +55,20 @@ bool analyzeSpeed(const std::vector<BookData>& books, std::string& searchItem) {
         else {
             binaryTreeSearchTotalTime += binaryTreeSearchEnd - binaryTreeSearchStart;
         }
+
+        binarySearchStart = std::chrono::steady_clock::now();
+        if (binarySearch(books,searchItem)) {
+            //std::cout << "Item was found using Binary Search, the time to complete the algorithm " << binarySearchTotalTime.count() << " seconds" << std::endl;
+            binarySearchFound = true;
+        }
+        binarySearchEnd = std::chrono::steady_clock::now();
+
+        if (i == 0) {
+            binarySearchTotalTime = binarySearchEnd - binarySearchStart;
+        }
+        else {
+            binarySearchTotalTime += binarySearchEnd - binarySearchStart;
+        }
     }
 
     std::cout << "It took Linear Search " << linearSearchTotalTime.count() << " seconds to complete" << std::endl;
@@ -67,7 +87,15 @@ bool analyzeSpeed(const std::vector<BookData>& books, std::string& searchItem) {
         std::cout << "Item was not found using Binary Tree Search." << std::endl;
     }
 
-    return binaryTreeSearchFound == linearSearchFound;
+    std::cout << "It took Binary Search " << binarySearchTotalTime.count() << " seconds to complete" << std::endl;
+    if (binarySearchFound) {
+        std::cout << "Item was found using Binary Search." << std::endl;
+    }
+    else {
+        std::cout << "Item was not found using Binary Search." << std::endl;
+    }
+
+    return binaryTreeSearchFound == linearSearchFound && binaryTreeSearchFound == binarySearchFound;
 }
 
 int main()
@@ -86,16 +114,30 @@ int main()
         {"The Resurrectionist: The Lost Work of Dr. Spencer Black", Genre::Mystery, 192}
     };
 
+    std::vector<BookData> booksSorted = {
+        {"House of Leaves", Genre::Mystery, 736},
+        {"Interview with the Vampire", Genre::GothicFiction, 308},
+        {"Legend of the Galactic Heroes: Dawn", Genre::SpaceOpera, 292},
+        {"Memnoch the Devil", Genre::GothicFiction, 401},
+        {"The Lesser Dead", Genre::GothicFiction, 357},
+        {"The Resurrectionist: The Lost Work of Dr. Spencer Black", Genre::Mystery, 192},
+        {"The Temple of the Golden Pavilion", Genre::Novel, 264},
+        {"Those Across the River", Genre::HorrorFiction, 340},
+        {"Uzumaki", Genre::HorrorFiction, 648},
+        {"Vampire Hunter D Omnibus: Book One", Genre::Fiction, 640}
+    };
+
     std::string firstItem = "The Temple of the Golden Pavilion";
     std::string lastItem = "The Resurrectionist: The Lost Work of Dr. Spencer Black";
     std::string notInDatabase = "hello";
 
-    
     //Serialize data
     serializeData(books, "books.csv");
+    serializeData(booksSorted, "booksSorted.csv");
 
     //Deserialize data
     std::vector<BookData> deserializedBooks = deserializeData("books.csv");
+
 
     /*
     //Display deserialized data
@@ -112,6 +154,11 @@ int main()
     std::cout << "In case of the item not existing in the data base: " << std::endl;
     analyzeSpeed(deserializedBooks, notInDatabase);
     std::cout << std::endl;
+    std::cout << "In case of the item being the first in the data base which is sorted: " << std::endl;
+    analyzeSpeed(booksSorted, firstItem);
+    std::cout << std::endl;
+    std::cout << "In case of the item being the last in the data base which is sorted: " << std::endl;
+    analyzeSpeed(booksSorted, lastItem);
     return 0;
 }
 
