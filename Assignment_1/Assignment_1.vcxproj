@@ -135,6 +135,9 @@
     <ClInclude Include="Algorithms.h" />
     <ClInclude Include="Serialization.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="books.csv" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

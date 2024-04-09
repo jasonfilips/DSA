@@ -7,9 +7,17 @@
 
 struct BookData;
 enum class Genre;
+struct TreeNode;
+
+struct TreeNode {
+    BookData data;
+    TreeNode* left;
+    TreeNode* right;
+
+    TreeNode(const BookData& book) : data(book), left(nullptr), right(nullptr) {}
+};
 
 void algorithmExample();
 bool LinearSearch(const std::vector<BookData>& books, std::string& searchItem);
-bool analyzeSpeed(const std::vector<BookData>& books, std::string& searchItem);
 
 #endif
