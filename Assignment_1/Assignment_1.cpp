@@ -127,6 +127,19 @@ int main()
         {"Vampire Hunter D Omnibus: Book One", Genre::Fiction, 640}
     };
 
+    std::vector<BookData> booksReverseSorted = {
+        {"Vampire Hunter D Omnibus: Book One", Genre::Fiction, 640},
+        {"Uzumaki", Genre::HorrorFiction, 648},
+        {"Those Across the River", Genre::HorrorFiction, 340},
+        {"The Temple of the Golden Pavilion", Genre::Novel, 264},
+        {"The Resurrectionist: The Lost Work of Dr. Spencer Black", Genre::Mystery, 192},
+        {"The Lesser Dead", Genre::GothicFiction, 357},
+        {"Memnoch the Devil", Genre::GothicFiction, 401},
+        {"Legend of the Galactic Heroes: Dawn", Genre::SpaceOpera, 292},
+        {"Interview with the Vampire", Genre::GothicFiction, 308},
+        {"House of Leaves", Genre::Mystery, 736}
+    };
+
     std::string firstItem = "The Temple of the Golden Pavilion";
     std::string lastItem = "The Resurrectionist: The Lost Work of Dr. Spencer Black";
     std::string notInDatabase = "hello";
@@ -159,6 +172,10 @@ int main()
     std::cout << std::endl;
     std::cout << "In case of the item being the last in the data base which is sorted: " << std::endl;
     analyzeSpeed(booksSorted, lastItem);
+    std::cout << std::endl;
+    std::cout << "In case of the item being the first in the data base which is reverse sorted: " << std::endl;
+    analyzeSpeed(booksReverseSorted, lastItem);
+
     return 0;
 }
 
