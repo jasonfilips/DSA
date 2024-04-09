@@ -11,7 +11,7 @@ bool analyzeSpeed(const std::vector<BookData>& books, std::string& searchItem) {
     std::chrono::duration<double> duration = end - start;
     //run the algorithm 10 times
     for (int i = 0; i < 10; i++) {
-        if (LinearSearch(books, searchItem)) {
+        if (linearSearch(books, searchItem)) {
             end = std::chrono::steady_clock::now();
             duration = end - start;
             std::cout << "Item was found, the time to complete the algorithm " << duration.count() << " seconds" << std::endl;

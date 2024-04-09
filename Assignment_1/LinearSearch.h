@@ -18,6 +18,6 @@ struct TreeNode {
 };
 
 void algorithmExample();
-bool LinearSearch(const std::vector<BookData>& books, std::string& searchItem);
+bool linearSearch(const std::vector<BookData>& books, std::string& searchItem);
 
 #endif

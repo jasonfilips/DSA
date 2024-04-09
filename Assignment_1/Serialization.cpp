@@ -10,7 +10,10 @@ enum class Genre {
     Fiction,
     Mystery,
     Novel,
-    NonFiction
+    NonFiction,
+    Vampire,
+    HistoricalFiction,
+    Biography
 };
 
 //Struct to represent information about a book

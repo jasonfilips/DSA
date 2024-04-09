@@ -8,7 +8,7 @@ void algorithmExample() {
 }
 
 //Linear search function
-bool LinearSearch(const std::vector<BookData>& books, std::string& searchItem) {
+bool linearSearch(const std::vector<BookData>& books, std::string& searchItem) {
     for (const auto& book : books) {
         if (book.title == searchItem) {
             return true;
