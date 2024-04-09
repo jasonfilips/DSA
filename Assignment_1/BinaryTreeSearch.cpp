@@ -1,4 +1,5 @@
 #include "Serialization.h"
+#include <span>
 
 //Binary tree node
 struct TreeNode {
@@ -6,29 +7,29 @@ struct TreeNode {
     TreeNode* left;
     TreeNode* right;
 
-    TreeNode(const BookData& book) :book(book), left(nullptr), right(nullptr) {}
+    TreeNode(BookData&& book) :book(std::move(book)), left(nullptr), right(nullptr) {}
 };
 
 class BinaryTreeSearch {
 private:
     TreeNode* root;
 
-    TreeNode* insertNode(TreeNode* node, const BookData& book);
-    bool searchNode(TreeNode* node, const std::string& searchItem) const; //adding const at the end to not modify any member variables of the class
-    void createTree(const std::vector<BookData>& books);
+    TreeNode* insertNode(TreeNode* node, BookData&& book);
+    bool searchNode(TreeNode* node, std::string_view searchItem) const;
+    void createTree(std::span<BookData> books);
     void deleteTree(TreeNode* node);
 
 public:
-    BinaryTreeSearch(const std::vector<BookData>& books);
+    BinaryTreeSearch(std::span<BookData> books);
     ~BinaryTreeSearch();
 
-    void insert(const BookData& book);
-    void create(const std::vector<BookData>& books);
-    bool search(const std::string& searchItem) const;
+    void insert(BookData&& book);
+    void create(std::span<BookData> books);
+    bool search(std::string_view searchItem) const;
 };
 
 //Constructor
-BinaryTreeSearch::BinaryTreeSearch(const std::vector<BookData>& books) : root(nullptr) {
+BinaryTreeSearch::BinaryTreeSearch(std::span<BookData> books) : root(nullptr) {
     create(books);
 }
 
@@ -47,33 +48,33 @@ void BinaryTreeSearch::deleteTree(TreeNode* node) {
 }
 
 //Public function to insert a new node into the tree
-void BinaryTreeSearch::insert(const BookData& book) {
-    root = insertNode(root, book);
+void BinaryTreeSearch::insert(BookData&& book) {
+    root = insertNode(root, std::move(book));
 }
 
 //Private recursive function to insert a node into the tree
-TreeNode* BinaryTreeSearch::insertNode(TreeNode* node, const BookData& book) {
+TreeNode* BinaryTreeSearch::insertNode(TreeNode* node, BookData&& book) {
     if (node == nullptr) {
-        return new TreeNode(book);
+        return new TreeNode(std::move(book));
     }
 
     if (book.title < node->book.title) {
-        node->left = insertNode(node->left, book);
+        node->left = insertNode(node->left, std::move(book));
     }
     else {
-        node->right = insertNode(node->right, book);
+        node->right = insertNode(node->right, std::move(book));
     }
 
     return node;
 }
 
 //Public function to search for a title 
-bool BinaryTreeSearch::search(const std::string& searchItem) const {
+bool BinaryTreeSearch::search(std::string_view searchItem) const {
     return searchNode(root, searchItem);
 }
 
 
-bool BinaryTreeSearch::searchNode(TreeNode* node, const std::string& searchItem) const {
+bool BinaryTreeSearch::searchNode(TreeNode* node, std::string_view searchItem) const {
     if (node == nullptr) {
         return false;
     }
@@ -90,13 +91,13 @@ bool BinaryTreeSearch::searchNode(TreeNode* node, const std::string& searchItem)
 }
 
 //Public function to create a tree
-void BinaryTreeSearch::create(const std::vector<BookData>& books) {
+void BinaryTreeSearch::create(std::span<BookData> books) {
     createTree(books);
 }
 
 //Function to create a tree from a books vector
-void BinaryTreeSearch::createTree(const std::vector<BookData>& books) {
-    for (const auto& book : books) {
-        insert(book);
+void BinaryTreeSearch::createTree(std::span<BookData> books) {
+    for (auto& book : books) {
+        insert(std::move(book));
     }
 }

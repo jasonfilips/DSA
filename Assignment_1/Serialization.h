@@ -8,6 +8,7 @@
 #include <sstream>
 #include <vector>
 #include <string>
+#include <span>
 
 //Enum representing different book genres
 enum class Genre {
@@ -30,7 +31,7 @@ struct BookData {
 };
 
 //Function prototypes
-void serializeData(const std::vector<BookData>& books, const std::string& filePath);
+void serializeData(std::span<BookData> books, const std::string& filePath);
 std::vector<BookData> deserializeData(const std::string& filePath);
 
 #endif

@@ -4,21 +4,28 @@
 #include "BinarySearch.h"
 #include <vector>
 #include <chrono>
+#include <string_view>
+#include <span>
 
-bool analyzeSpeed(const std::vector<BookData>& books, std::string& searchItem) {
+
+template<typename Func>
+std::chrono::duration<double> analyzeFunc(Func f)
+{
+    auto start = std::chrono::steady_clock::now();
+    for (int i = 0; i < 100000; i++) {
+        f();
+    }
+    auto end = std::chrono::steady_clock::now();
+    return end - start;
+}
+
+bool analyzeSpeed(std::span<BookData> books, std::string_view searchItem) {
     std::cout << "Testing the speed of the algorithms" << std::endl;
-
-    auto linearSearchStart = std::chrono::steady_clock::now();
-    auto linearSearchEnd = std::chrono::steady_clock::now();
     std::chrono::duration<double> linearSearchTotalTime;
-
-    auto binaryTreeSearchStart = std::chrono::steady_clock::now();
-    auto binaryTreeSearchEnd = std::chrono::steady_clock::now();
     std::chrono::duration<double> binaryTreeSearchTotalTime;
-
-    auto binarySearchStart = std::chrono::steady_clock::now();
-    auto binarySearchEnd = std::chrono::steady_clock::now();
     std::chrono::duration<double> binarySearchTotalTime;
+    std::chrono::duration<double> binaryTreeCreationTime;
+
 
     bool binaryTreeSearchFound = false;
     bool binarySearchFound = false;
@@ -26,50 +33,28 @@ bool analyzeSpeed(const std::vector<BookData>& books, std::string& searchItem) {
 
     BinaryTreeSearch bst(books);
 
-    //run the algorithm 100000 times
-    for (int i = 0; i < 100000; i++) {
-        linearSearchStart = std::chrono::steady_clock::now();
-        if (linearSearch(books, searchItem)) {
-            //std::cout << "Item was found using Linear Search, the time to complete the algorithm " << linearSearchTotalTime.count() << " seconds" << std::endl;
-            linearSearchFound = true;
-        }
-        linearSearchEnd = std::chrono::steady_clock::now();
 
-        if (i == 0) {
-            linearSearchTotalTime = linearSearchEnd-linearSearchStart;
-        }
-        else {
-            linearSearchTotalTime += linearSearchEnd - linearSearchStart;
-        }
+    linearSearchTotalTime = analyzeFunc([&]()
+        {
+            return linearSearch(books, searchItem);
+        });
 
-        binaryTreeSearchStart = std::chrono::steady_clock::now();
-        if (bst.search(searchItem)) {
-            //std::cout << "Item was found using Binary Tree Search, the time to complete the algorithm " << binaryTreeSearchTotalTime.count() << " seconds" << std::endl;
-            binaryTreeSearchFound = true;
-        }
-        binaryTreeSearchEnd = std::chrono::steady_clock::now();
+    binaryTreeSearchTotalTime = analyzeFunc([&]()
+        {
+            return bst.search(searchItem);
+        });
 
-        if (i == 0) {
-            binaryTreeSearchTotalTime = binaryTreeSearchEnd - binaryTreeSearchStart;
-        }
-        else {
-            binaryTreeSearchTotalTime += binaryTreeSearchEnd - binaryTreeSearchStart;
-        }
+    binarySearchTotalTime = analyzeFunc([&]()
+        {
+            return binarySearch(books, searchItem);
+        });
+    binaryTreeCreationTime = analyzeFunc([&]()
+        {
+            BinaryTreeSearch bst2(books);
+            return;
+        });
 
-        binarySearchStart = std::chrono::steady_clock::now();
-        if (binarySearch(books,searchItem)) {
-            //std::cout << "Item was found using Binary Search, the time to complete the algorithm " << binarySearchTotalTime.count() << " seconds" << std::endl;
-            binarySearchFound = true;
-        }
-        binarySearchEnd = std::chrono::steady_clock::now();
 
-        if (i == 0) {
-            binarySearchTotalTime = binarySearchEnd - binarySearchStart;
-        }
-        else {
-            binarySearchTotalTime += binarySearchEnd - binarySearchStart;
-        }
-    }
 
     std::cout << "It took Linear Search " << linearSearchTotalTime.count() << " seconds to complete" << std::endl;
     if (linearSearchFound) {
@@ -140,9 +125,13 @@ int main()
         {"House of Leaves", Genre::Mystery, 736}
     };
 
-    std::string firstItem = "The Temple of the Golden Pavilion";
-    std::string lastItem = "The Resurrectionist: The Lost Work of Dr. Spencer Black";
-    std::string notInDatabase = "hello";
+    std::string_view firstItem = "The Temple of the Golden Pavilion";
+    std::string_view lastItem = "The Resurrectionist: The Lost Work of Dr. Spencer Black";
+    std::string_view notInDatabase = "hello";
+
+    std::string_view firstItemSorted = "House of Leaves";
+    std::string_view lastItemSorted = "Vampire Hunter D Omnibus: Book One";
+
 
     //Serialize data
     serializeData(books, "books.csv");
@@ -168,13 +157,13 @@ int main()
     analyzeSpeed(deserializedBooks, notInDatabase);
     std::cout << std::endl;
     std::cout << "In case of the item being the first in the data base which is sorted: " << std::endl;
-    analyzeSpeed(booksSorted, firstItem);
+    analyzeSpeed(booksSorted, firstItemSorted);
     std::cout << std::endl;
     std::cout << "In case of the item being the last in the data base which is sorted: " << std::endl;
-    analyzeSpeed(booksSorted, lastItem);
+    analyzeSpeed(booksSorted, lastItemSorted);
     std::cout << std::endl;
     std::cout << "In case of the item being the first in the data base which is reverse sorted: " << std::endl;
-    analyzeSpeed(booksReverseSorted, lastItem);
+    analyzeSpeed(booksReverseSorted, lastItemSorted);
 
     return 0;
 }

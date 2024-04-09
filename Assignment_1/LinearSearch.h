@@ -4,11 +4,12 @@
 #define ALGORITHMS_H
 
 #include "Serialization.h"
+#include <span>
 
 struct BookData;
 enum class Genre;
 
 void algorithmExample();
-bool linearSearch(const std::vector<BookData>& books, std::string& searchItem);
+bool linearSearch(std::span<BookData> books, std::string_view searchItem);
 
 #endif

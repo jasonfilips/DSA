@@ -4,7 +4,8 @@
 #define BINARY_H
 
 #include "Serialization.h"
+#include <span>
 
-bool binarySearch(const std::vector<BookData>& books, const std::string& searchItem);
+bool binarySearch(std::span<BookData> books, std::string_view searchItem);
 
 #endif

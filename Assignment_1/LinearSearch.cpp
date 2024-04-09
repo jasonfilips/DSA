@@ -1,5 +1,5 @@
 #include "Serialization.h"
-#include <vector>
+#include <span>
 
 void algorithmExample() {
     for (int i = 0; i < 100000000; i++) {
@@ -8,16 +8,16 @@ void algorithmExample() {
 }
 
 //Linear search function
-bool linearSearch(const std::vector<BookData>& books, std::string& searchItem) {
+bool linearSearch(std::span<BookData> books, std::string_view searchItem) {
     for (const auto& book : books) {
         if (book.title == searchItem) {
             return true;
         }
         try {
-            if (book.pageCount == std::stoi(searchItem)) {
+            if (book.pageCount == std::atoi(searchItem.data())) {
                 return true;
             }
-            if (book.genre == static_cast<Genre>(std::stoi(searchItem))) {
+            if (book.genre == static_cast<Genre>(std::atoi(searchItem.data()))) {
                 return true;
             }
         }

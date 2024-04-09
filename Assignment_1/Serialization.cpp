@@ -3,6 +3,7 @@
 #include <sstream>
 #include <vector>
 #include <string>
+#include <span>
 
 //Enum representing different book genres
 enum class Genre {
@@ -27,7 +28,7 @@ struct BookData {
 //Serializing data into a CSV file
 //Using & to not copy the data, but use a refference
 //Using const to not modify the data
-void serializeData(const std::vector<BookData>& books, const std::string& filePath) {
+void serializeData(std::span<BookData> books, const std::string& filePath) {
     //created a new variable using the ofstream constructor
     std::ofstream file(filePath);
 

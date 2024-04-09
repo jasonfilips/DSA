@@ -10,24 +10,25 @@ struct TreeNode {
     TreeNode* left;
     TreeNode* right;
 
-    TreeNode(const BookData& book);
+    TreeNode(BookData&& book);
 };
 
 class BinaryTreeSearch {
 private:
     TreeNode* root;
 
-    TreeNode* insertNode(TreeNode* node, const BookData& book);
-    bool searchNode(TreeNode* node, const std::string& searchItem) const;
-    void createTree(const std::vector<BookData>& books);
+    TreeNode* insertNode(TreeNode* node, BookData&& book);
+    bool searchNode(TreeNode* node, std::string_view searchItem) const;
+    void createTree(std::span<BookData> books);
     void deleteTree(TreeNode* node);
+
 public:
-    BinaryTreeSearch(const std::vector<BookData>& books);
+    BinaryTreeSearch(std::span<BookData> books);
     ~BinaryTreeSearch();
 
-    void insert(const BookData& book);
-    void create(const std::vector<BookData>& books);
-    bool search(const std::string& searchItem) const;
+    void insert(BookData&& book);
+    void create(std::span<BookData> books);
+    bool search(std::string_view searchItem) const;
 };
 
 #endif
