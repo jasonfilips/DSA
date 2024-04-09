@@ -27,7 +27,7 @@
     <ClCompile Include="LinearSearch.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
-    <ClCompile Include="BinarySearchTree.cpp">
+    <ClCompile Include="BinaryTreeSearch.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -38,7 +38,7 @@
     <ClInclude Include="Serialization.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="BinarySearchTree.h">
+    <ClInclude Include="BinaryTreeSearch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

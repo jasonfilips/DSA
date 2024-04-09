@@ -13,7 +13,7 @@ struct TreeNode {
     TreeNode(const BookData& book);
 };
 
-class BinarySearchTree {
+class BinaryTreeSearch {
 private:
     TreeNode* root;
 
@@ -22,8 +22,8 @@ private:
     void createTree(const std::vector<BookData>& books);
     void deleteTree(TreeNode* node);
 public:
-    BinarySearchTree(const std::vector<BookData>& books);
-    ~BinarySearchTree();
+    BinaryTreeSearch(const std::vector<BookData>& books);
+    ~BinaryTreeSearch();
 
     void insert(const BookData& book);
     void create(const std::vector<BookData>& books);

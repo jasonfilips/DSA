@@ -1,6 +1,6 @@
 #include "Serialization.h"
 #include "LinearSearch.h"
-#include "BinarySearchTree.h"
+#include "BinaryTreeSearch.h"
 #include <vector>
 #include <chrono>
 
@@ -18,7 +18,7 @@ bool analyzeSpeed(const std::vector<BookData>& books, std::string& searchItem) {
     bool binaryTreeSearchFound = false;
     bool linearSearchFound = false;
 
-    BinarySearchTree bst(books);
+    BinaryTreeSearch bst(books);
 
     //run the algorithm 100000 times
     for (int i = 0; i < 100000; i++) {
