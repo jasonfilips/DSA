@@ -32,6 +32,11 @@ public:
     void create(const std::vector<BookData>& books);
 };
 
+//Constructor
+LinkedList::LinkedList(const std::vector<BookData>& books) : rootNode(nullptr) {
+    create(books);
+}
+
 //Destructor
 LinkedList::~LinkedList() {
     deleteList(rootNode);
@@ -62,6 +67,28 @@ ListNode* LinkedList::insertNode(ListNode* node, const BookData& book) {
     return node;
 }
 
+//Public function to insert a node after a specified node
+ListNode* LinkedList::insertAfter(LinkedList* list, ListNode* node, const BookData& book) {
+    return insertAfterNode(list, node, book);
+}
+
+//Private function to insert a node after a specified node
+ListNode* LinkedList::insertAfterNode(LinkedList* list, ListNode* node, const BookData& book) {
+    ListNode* newNode = new ListNode(book);
+
+    if (node == nullptr) {
+        newNode->nextNode = list->rootNode;
+        list->rootNode = newNode;
+    }
+    else {
+        newNode->nextNode = node->nextNode;
+        node->nextNode = newNode;
+    }
+
+    return newNode;
+}
+
+
 //Public function to search for a node by the title and returns the node and the one before it
 std::vector<ListNode*> LinkedList::search(const std::string& searchItem, std::vector<ListNode*>& foundNodes) const {
     return searchNodeByTitle(rootNode, searchItem, foundNodes);
@@ -82,4 +109,17 @@ std::vector<ListNode*> LinkedList::searchNodeByTitle(ListNode* node, const std::
         return searchNodeByTitle(node->nextNode, searchItem, foundNodes);
     }
 }
+
+//Public function to create a linked list
+void LinkedList::create(const std::vector<BookData>& books) {
+    createList(books);
+}
+
+//Private function to create a linked list
+void LinkedList::createList(const std::vector<BookData>& books) {
+    for (const auto& book : books) {
+        insert(book);
+    }
+}
+
 
