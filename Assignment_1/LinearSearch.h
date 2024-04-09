@@ -10,11 +10,11 @@ enum class Genre;
 struct TreeNode;
 
 struct TreeNode {
-    BookData data;
+    BookData book;
     TreeNode* left;
     TreeNode* right;
 
-    TreeNode(const BookData& book) : data(book), left(nullptr), right(nullptr) {}
+    TreeNode(const BookData& book) : book(book), left(nullptr), right(nullptr) {}
 };
 
 void algorithmExample();

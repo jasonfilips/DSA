@@ -3,11 +3,11 @@
 
 //Binary tree node
 struct TreeNode {
-    BookData data;
+    BookData book;
     TreeNode* left;
     TreeNode* right;
 
-    TreeNode(const BookData& book) :data(book), left(nullptr), right(nullptr) {}
+    TreeNode(const BookData& book) :book(book), left(nullptr), right(nullptr) {}
 };
 
 
@@ -41,3 +41,45 @@ void BinarySearchTree::deleteTree(TreeNode* node) {
     }
 }
 
+//Public function to insert a new node into the tree
+void BinarySearchTree::insert(const BookData& book) {
+    root = insertNode(root, book);
+}
+
+//Private recursive function to insert a node into the tree
+TreeNode* BinarySearchTree::insertNode(TreeNode* node, const BookData& book) {
+    if (node == nullptr) {
+        return new TreeNode(book);
+    }
+
+    if (book.title < node->book.title) {
+        node->left = insertNode(node->left, book);
+    }
+    else {
+        node->right = insertNode(node->right, book);
+    }
+
+    return node;
+}
+
+//Public function to search for a title 
+bool BinarySearchTree::search(const std::string& searchItem) const {
+    return searchNode(root, searchItem);
+}
+
+
+bool BinarySearchTree::searchNode(TreeNode* node, const std::string& searchItem) const {
+    if (node == nullptr) {
+        return false;
+    }
+
+    if (node->book.title == searchItem) {
+        return true;
+    }
+    else if (searchItem < node->book.title) {
+        return searchNode(node->left, searchItem);
+    }
+    else {
+        return searchNode(node->right, searchItem);
+    }
+}

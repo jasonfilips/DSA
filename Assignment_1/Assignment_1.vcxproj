@@ -127,12 +127,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Algorithms.cpp" />
+    <ClCompile Include="LinearSearch.cpp" />
     <ClCompile Include="Assignment_1.cpp" />
+    <ClCompile Include="BinarySearchTree.cpp" />
     <ClCompile Include="Serialization.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Algorithms.h" />
+    <ClInclude Include="LinearSearch.h" />
+    <ClInclude Include="BinarySearchTree.h" />
     <ClInclude Include="Serialization.h" />
   </ItemGroup>
   <ItemGroup>
