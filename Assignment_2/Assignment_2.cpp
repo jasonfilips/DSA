@@ -1,8 +1,11 @@
-#include "LinkedList.h"
+//#include "LinkedList.h"
 #include "../Assignment_1/Serialization.h"
 #include <iostream>
+#include <vector>
 
 int main()
 {
-    std::cout << "Hello World!\n";
+    std::string filepath = "../Assignment_1/books.csv";
+
+    std::vector<BookData> books = deserializeData(filepath);
 }
