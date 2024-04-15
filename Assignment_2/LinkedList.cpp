@@ -6,7 +6,7 @@ struct ListNode {
     BookData book;
     ListNode* nextNode;
 
-    ListNode(BookData&& book);
+    ListNode(BookData&& book) :book(std::move(book)), nextNode(nullptr){};
 };
 
 
@@ -109,6 +109,7 @@ std::vector<ListNode*> LinkedList::searchNodeByTitle(ListNode* node, std::string
         foundNodes[0] = node;
         return searchNodeByTitle(node->nextNode, searchItem, foundNodes);
     }
+    return foundNodes;
 }
 
 //Public function to create a linked list
